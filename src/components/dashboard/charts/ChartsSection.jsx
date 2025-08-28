@@ -12,10 +12,10 @@ import {
   PieChart,
   Pie,
   Cell,
+  ResponsiveContainer,
 } from "recharts";
 
 function ChartsSection() {
-  // Yearly comparison for total users
   const userStats = [
     { month: "Jan", current: 14, prev: 11 },
     { month: "Feb", current: 19, prev: 13 },
@@ -26,7 +26,6 @@ function ChartsSection() {
     { month: "Jul", current: 26, prev: 21 },
   ];
 
-  // Breakdown by device type
   const devices = [
     { name: "Linux", value: 15 },
     { name: "Mac", value: 20 },
@@ -36,7 +35,6 @@ function ChartsSection() {
     { name: "Other", value: 10 },
   ];
 
-  // Regional traffic split
   const regions = [
     { name: "United States", value: 40.2 },
     { name: "Canada", value: 21.7 },
@@ -44,7 +42,6 @@ function ChartsSection() {
     { name: "Other", value: 9.8 },
   ];
 
-  // Sources driving traffic
   const sources = [
     { name: "Google", percentage: 47 },
     { name: "YouTube", percentage: 23 },
@@ -59,31 +56,37 @@ function ChartsSection() {
 
   return (
     <div className="space-y-6">
-      {/* Top section: Users + Traffic sources */}
+   
       <div className="grid gap-6 grid-cols-1 xl:grid-cols-3">
+     
         <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200 xl:col-span-2">
           <h3 className="font-semibold text-lg mb-4">Total Users</h3>
-          <LineChart width={580} height={280} data={userStats}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="month" />
-            <YAxis />
-            <Tooltip />
-            <Legend />
-            <Line
-              type="monotone"
-              dataKey="current"
-              stroke="#3b82f6"
-              strokeWidth={2}
-            />
-            <Line
-              type="monotone"
-              dataKey="prev"
-              stroke="#6b7280"
-              strokeDasharray="4 4"
-            />
-          </LineChart>
+          <div className="w-full h-72">
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart data={userStats}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="month" />
+                <YAxis />
+                <Tooltip />
+                <Legend />
+                <Line
+                  type="monotone"
+                  dataKey="current"
+                  stroke="#3b82f6"
+                  strokeWidth={2}
+                />
+                <Line
+                  type="monotone"
+                  dataKey="prev"
+                  stroke="#6b7280"
+                  strokeDasharray="4 4"
+                />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
         </div>
 
+     
         <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
           <h3 className="font-semibold text-lg mb-5">Traffic by Website</h3>
           <div className="space-y-3">
@@ -102,55 +105,76 @@ function ChartsSection() {
         </div>
       </div>
 
-      {/* Bottom section: Devices + Locations */}
+
       <div className="grid gap-6 grid-cols-1 lg:grid-cols-2">
+       
         <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
           <h3 className="font-semibold text-lg mb-5">Traffic by Device</h3>
-          <BarChart width={380} height={240} data={devices}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="name" />
-            <YAxis />
-            <Tooltip />
-            <Bar dataKey="value" barSize={22}>
-              {devices.map((entry, idx) => (
-                <Cell
-                  key={entry.name}
-                  fill={
-                    ["#3b82f6", "#10b981", "#6366f1", "#f59e0b", "#ef4444", "#8b5cf6"][
-                      idx % 6
-                    ]
-                  }
-                />
-              ))}
-            </Bar>
-          </BarChart>
+          <div className="w-full h-64">
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={devices}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="name" />
+                <YAxis />
+                <Tooltip />
+                <Bar dataKey="value" barSize={22}>
+                  {devices.map((entry, idx) => (
+                    <Cell
+                      key={entry.name}
+                      fill={
+                        [
+                          "#3b82f6",
+                          "#10b981",
+                          "#6366f1",
+                          "#f59e0b",
+                          "#ef4444",
+                          "#8b5cf6",
+                        ][idx % 6]
+                      }
+                    />
+                  ))}
+                </Bar>
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
         </div>
 
+        {/* Pie Chart */}
         <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
           <h3 className="font-semibold text-lg mb-5">Traffic by Location</h3>
-          <div className="flex items-center justify-center">
-            <PieChart width={200} height={200}>
-              <Pie
-                data={regions}
-                dataKey="value"
-                nameKey="name"
-                cx="50%"
-                cy="50%"
-                innerRadius={50}
-                outerRadius={80}
-                paddingAngle={4}
-              >
-                {regions.map((region, idx) => (
-                  <Cell key={region.name} fill={palette[idx % palette.length]} />
-                ))}
-              </Pie>
-              <Tooltip />
-            </PieChart>
+          <div className="flex flex-col items-center sm:flex-row sm:justify-center">
+            <div className="w-48 h-48">
+              <ResponsiveContainer width="100%" height="100%">
+                <PieChart>
+                  <Pie
+                    data={regions}
+                    dataKey="value"
+                    nameKey="name"
+                    cx="50%"
+                    cy="50%"
+                    innerRadius={50}
+                    outerRadius={80}
+                    paddingAngle={4}
+                  >
+                    {regions.map((region, idx) => (
+                      <Cell
+                        key={region.name}
+                        fill={palette[idx % palette.length]}
+                      />
+                    ))}
+                  </Pie>
+                  <Tooltip />
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
 
-            {/* Legend */}
-            <div className="ml-6 space-y-2">
+           
+            <div className="mt-6 sm:mt-0 sm:ml-6 space-y-2">
               {regions.map((region, idx) => (
-                <div key={region.name} className="flex items-center justify-between w-44">
+                <div
+                  key={region.name}
+                  className="flex items-center justify-between w-44"
+                >
                   <div className="flex items-center space-x-2">
                     <div
                       className="w-3 h-3 rounded-full"
